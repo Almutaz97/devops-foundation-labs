@@ -3,3 +3,4 @@ gunicorn==22.0.0
 psycopg2-binary==2.9.9
 prometheus-client==0.20.0
 python-json-logger==2.0.7
+pytest==8.2.2
