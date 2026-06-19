@@ -35,6 +35,4 @@ jobs:
         run: |
           docker build \
             --tag minimal-devops-workload-api:ci \
-            projects/minimal-devops-workload-api
-
-            
+            . 
