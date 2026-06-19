@@ -46,10 +46,20 @@ jobs:
             -p 8000:8000 \
             minimal-devops-workload-api:ci
 
-          sleep 3
+          for i in {1..10}; do
+            if curl --fail --show-error --silent http://localhost:8000/health; then
+              docker rm -f minimal-api-smoke
+              exit 0
+            fi
 
-          curl --fail --show-error --silent http://localhost:8000/health
+            echo "Waiting for application to become healthy..."
+            sleep 1
+          done
+
+          echo "Smoke test failed. Container logs:"
+          docker logs minimal-api-smoke
 
           docker rm -f minimal-api-smoke
+          exit 1
 
 
