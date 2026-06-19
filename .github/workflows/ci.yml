@@ -30,3 +30,11 @@ jobs:
 
       - name: Run tests
         run: python -m pytest -v
+      
+      - name: Build Docker image
+        run: |
+          docker build \
+            --tag minimal-devops-workload-api:ci \
+            projects/minimal-devops-workload-api
+
+            
