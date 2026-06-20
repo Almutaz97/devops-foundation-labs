@@ -10,6 +10,10 @@ jobs:
     name: Run Python tests
     runs-on: ubuntu-latest
 
+    env:
+      IMAGE_NAME: minimal-devops-workload-api
+      IMAGE_TAG: ${{ github.sha }}
+
     defaults:
       run:
         working-directory: projects/minimal-devops-workload-api
@@ -34,21 +38,22 @@ jobs:
       - name: Build Docker image
         run: |
           docker build \
-            --tag minimal-devops-workload-api:ci \
+            --tag "${IMAGE_NAME}:${IMAGE_TAG}" \
             .
       
       - name: Smoke test Docker container
         run: |
           docker rm -f minimal-api-smoke 2>/dev/null || true
+          trap 'docker rm -f minimal-api-smoke 2>/dev/null || true' EXIT
 
           docker run -d \
             --name minimal-api-smoke \
             -p 8000:8000 \
-            minimal-devops-workload-api:ci
+            "${IMAGE_NAME}:${IMAGE_TAG}"
 
           for i in {1..10}; do
             if curl --fail --show-error --silent http://localhost:8000/health; then
-              docker rm -f minimal-api-smoke
+              echo "Smoke test passed"
               exit 0
             fi
 
@@ -58,8 +63,6 @@ jobs:
 
           echo "Smoke test failed. Container logs:"
           docker logs minimal-api-smoke
-
-          docker rm -f minimal-api-smoke
           exit 1
-
+      
 
