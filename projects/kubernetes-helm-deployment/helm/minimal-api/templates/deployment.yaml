@@ -22,6 +22,7 @@ spec:
         {{- include "minimal-api.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: application
     spec:
+      automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
