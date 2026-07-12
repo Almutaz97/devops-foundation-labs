@@ -1,0 +1,9 @@
+# Local Kubernetes secrets
+k8s/raw/02-secret.local.yaml
+
+# Helm local secret values
+helm/*/values-secret.yaml
+
+# Temporary files
+*.tmp
+*.log

@@ -1,0 +1,56 @@
+nameOverride: ""
+fullnameOverride: ""
+
+replicaCount: 2
+
+image:
+  repository: ghcr.io/almutaz97/minimal-devops-workload-api
+  tag: v0.2.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+  targetPort: 8000
+
+config:
+  appName: minimal-devops-workload-api
+  appEnv: helm
+  appPort: "8000"
+  dbHost: postgres
+  dbPort: "5432"
+
+secret:
+  dbName: minimal_api
+  dbUser: minimal_user
+  dbPassword: change-me-before-production
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+    ephemeral-storage: 64Mi
+  limits:
+    cpu: 500m
+    memory: 256Mi
+    ephemeral-storage: 256Mi
+
+postgres:
+  image:
+    repository: postgres
+    tag: 16-alpine
+    pullPolicy: IfNotPresent
+
+  storage:
+    size: 1Gi
+    storageClass: ""
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+      ephemeral-storage: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+      ephemeral-storage: 512Mi
