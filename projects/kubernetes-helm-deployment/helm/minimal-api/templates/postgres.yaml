@@ -35,6 +35,7 @@ spec:
         {{- include "minimal-api.selectorLabels" . | nindent 8 }}
         app.kubernetes.io/component: database
     spec:
+      automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       securityContext:
         fsGroup: 999
@@ -93,7 +94,14 @@ spec:
             timeoutSeconds: 3
             failureThreshold: 3
           resources:
-            {{- toYaml .Values.postgres.resources | nindent 12 }}
+            requests:
+              cpu: {{ .Values.postgres.resources.requests.cpu }}
+              memory: {{ .Values.postgres.resources.requests.memory }}
+              ephemeral-storage: {{ index .Values.postgres.resources.requests "ephemeral-storage" }}
+            limits:
+              cpu: {{ .Values.postgres.resources.limits.cpu }}
+              memory: {{ .Values.postgres.resources.limits.memory }}
+              ephemeral-storage: {{ index .Values.postgres.resources.limits "ephemeral-storage" }}
           volumeMounts:
             - name: postgres-data
               mountPath: /var/lib/postgresql/data

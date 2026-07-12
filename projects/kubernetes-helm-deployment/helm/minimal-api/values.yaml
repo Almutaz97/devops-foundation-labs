@@ -29,9 +29,11 @@ resources:
   requests:
     cpu: 100m
     memory: 128Mi
+    ephemeral-storage: 64Mi
   limits:
     cpu: 500m
     memory: 256Mi
+    ephemeral-storage: 256Mi
 
 postgres:
   image:
@@ -47,6 +49,8 @@ postgres:
     requests:
       cpu: 100m
       memory: 128Mi
+      ephemeral-storage: 128Mi
     limits:
       cpu: 500m
       memory: 512Mi
+      ephemeral-storage: 512Mi
