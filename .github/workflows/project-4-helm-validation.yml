@@ -1,0 +1,53 @@
+name: Project 4 Helm Validation
+
+on:
+  push:
+    paths:
+      - "projects/kubernetes-helm-deployment/**"
+      - ".github/workflows/project-4-helm-validation.yml"
+  pull_request:
+    paths:
+      - "projects/kubernetes-helm-deployment/**"
+      - ".github/workflows/project-4-helm-validation.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  helm-validation:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: projects/kubernetes-helm-deployment
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: latest
+
+      - name: Lint Helm chart
+        run: helm lint helm/minimal-api
+
+      - name: Render Helm chart
+        run: |
+          helm template minimal-api helm/minimal-api \
+            --namespace minimal-api-helm \
+            > /tmp/minimal-api-rendered.yaml
+
+      - name: Validate rendered manifests
+        run: |
+          docker run --rm \
+            -v /tmp/minimal-api-rendered.yaml:/manifest.yaml:ro \
+            ghcr.io/yannh/kubeconform:latest \
+            -strict \
+            -summary \
+            /manifest.yaml
+
+      - name: Validate shell scripts
+        run: bash -n scripts/*.sh

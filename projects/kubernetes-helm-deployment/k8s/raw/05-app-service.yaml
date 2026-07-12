@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: minimal-api
+  namespace: minimal-api
+  labels:
+    app.kubernetes.io/name: minimal-api
+    app.kubernetes.io/component: application
+    app.kubernetes.io/part-of: minimal-api
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: minimal-api
+    app.kubernetes.io/component: application
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

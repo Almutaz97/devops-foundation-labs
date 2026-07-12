@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: minimal-api-config
+  namespace: minimal-api
+  labels:
+    app.kubernetes.io/name: minimal-api
+    app.kubernetes.io/component: configuration
+data:
+  APP_NAME: "minimal-devops-workload-api"
+  APP_ENV: "kubernetes"
+  APP_PORT: "8000"
+  DB_HOST: "postgres"
+  DB_PORT: "5432"

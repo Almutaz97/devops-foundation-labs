@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "minimal-api.fullname" . }}-config
+  labels:
+    {{- include "minimal-api.labels" . | nindent 4 }}
+data:
+  APP_NAME: {{ .Values.config.appName | quote }}
+  APP_ENV: {{ .Values.config.appEnv | quote }}
+  APP_PORT: {{ .Values.config.appPort | quote }}
+  DB_HOST: {{ printf "%s-postgres" (include "minimal-api.fullname" .) | quote }}
+  DB_PORT: {{ .Values.config.dbPort | quote }}
